@@ -5,6 +5,24 @@
 
 json = json or {}
 
+local _encodeMap = {
+    ["nil"] = function(object)
+        return "null"
+    end,
+    ["string"] = function(object)
+        return '"' .. object .. '"'
+    end,
+    ["number"] = function(object)
+        return tostring(object)
+    end,
+    ["boolean"] = function(object)
+        return tostring(object)
+    end,
+    ["function"] = function(object)
+        return "null"
+    end,
+}
+
 local function isArray(t)
     local maxIndex = 0
     for k,v in pairs(t) do
@@ -21,46 +39,30 @@ function json.encode(object)
     if object == nil then
         return "null"
     end
-
+    
     local objectType
     objectType = type(object)
-    
-    if objectType == "nil" then
-        return "null"
-    end
 
-    if objectType == "string" then
-        return '"' .. object .. '"'
-    end
-
-    if objectType == "number" then
-        return tostring(object)
-    end
-
-    if objectType == "boolean" then
-        return tostring(object)
-    end
-
-    if objectType == "function" then
-        return "null"
-    end
-
-    if objectType == "table" then
-        local t = {}
-        local bArray, maxCount = isArray(object)
-        if bArray then
-            for i=1,maxCount do
-                table.insert(t, json.encode(object[i]))
+    if _encodeMap[objectType] then
+        return _encodeMap[objectType](object)
+    else
+        if objectType == "table" then
+            local t = {}
+            local bArray, maxCount = isArray(object)
+            if bArray then
+                for i=1,maxCount do
+                    table.insert(t, json.encode(object[i]))
+                end
+            else
+                for k,v in pairs(object) do
+                    table.insert(t, '"' .. tostring(k) .. '":' .. json.encode(v))
+                end
             end
-        else
-            for k,v in pairs(object) do
-                table.insert(t, '"' .. tostring(k) .. '":' .. json.encode(v))
+            if bArray then
+                return '[' .. table.concat(t, ',') .. ']'
+            else
+                return '{' .. table.concat(t, ',') .. '}'
             end
-        end
-        if bArray then
-            return '[' .. table.concat(t, ',') .. ']'
-        else
-            return '{' .. table.concat(t, ',') .. '}'
         end
     end
 end
