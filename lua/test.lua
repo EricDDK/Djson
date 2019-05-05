@@ -17,7 +17,13 @@ local function testEncode()
 end
 
 local function testDecode()
-    
+    local str = "{\"code\":1,\"data\":\"sssss\"}"
+    local o = json.decode(str)
+    print("testDecode 1 => ", o.code, o.data)
+
+    str = "{\"code\":1,\"func\":{\"code\":2},\"code2\":2,\"data\":\"sssss\",\"code1\":1}"
+    o = json.decode(str)
+    print("testDecode 2 => ", o.code, o.data, o.func.code)
 end
 
 local function test()
