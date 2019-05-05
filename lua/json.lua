@@ -20,13 +20,13 @@ local _encodeMap = {
     end,
     ["function"] = function(object)
         return "null"
-    end,
+    end
 }
 
 local function isArray(t)
     local maxIndex = 0
-    for k,v in pairs(t) do
-        if type(k) == "number" and math.floor(k)==k and 1<=k then
+    for k, v in pairs(t) do
+        if type(k) == "number" and math.floor(k) == k and 1 <= k then
             maxIndex = math.max(k, maxIndex)
         else
             return false
@@ -44,7 +44,7 @@ function json.encode(object)
     if object == nil then
         return "null"
     end
-    
+
     local objectType
     objectType = type(object)
 
@@ -55,18 +55,18 @@ function json.encode(object)
             local t = {}
             local bArray, maxCount = isArray(object)
             if bArray then
-                for i=1,maxCount do
+                for i = 1, maxCount do
                     table.insert(t, json.encode(object[i]))
                 end
             else
-                for k,v in pairs(object) do
+                for k, v in pairs(object) do
                     table.insert(t, '"' .. tostring(k) .. '":' .. json.encode(v))
                 end
             end
             if bArray then
-                return '[' .. table.concat(t, ',') .. ']'
+                return "[" .. table.concat(t, ",") .. "]"
             else
-                return '{' .. table.concat(t, ',') .. '}'
+                return "{" .. table.concat(t, ",") .. "}"
             end
         end
     end
@@ -79,7 +79,7 @@ local _otherChars = {
     ["false"] = false,
     ["null"] = nil
 }
-local _otherNames = {"true","false","null"}
+local _otherNames = {"true", "false", "null"}
 
 local function scanWhiteSpace(str, startPos)
     local len = string.len(str)
@@ -95,7 +95,7 @@ local function decodeNumber(str, startPos)
     while string.find(_numberChars, string.sub(str, endPos, endPos), 1, true) and endPos <= len do
         endPos = endPos + 1
     end
-    local stringCommand = load("return " .. string.sub(str,startPos, endPos - 1))
+    local stringCommand = load("return " .. string.sub(str, startPos, endPos - 1))
     return stringCommand(), endPos
 end
 
@@ -109,24 +109,24 @@ local function decodeString(str, startPos)
         isEnd = curChar == startChar
         endPos = endPos + 1
     until isEnd
-    local stringCommand = load("return " .. string.sub(str,startPos, endPos - 1))
+    local stringCommand = load("return " .. string.sub(str, startPos, endPos - 1))
     return stringCommand(), endPos
 end
 
 local function decodeArray(str, startPos)
-    local array = {}	-- The return array
+    local array = {} -- The return array
     local len = string.len(str)
     startPos = startPos + 1
     while true do
         local curChar = string.sub(str, startPos, startPos)
-        if curChar == ']' then
+        if curChar == "]" then
             return array, startPos + 1
         end
-        if curChar == ',' then
+        if curChar == "," then
             startPos = startPos + 1
         end
         local object = json.decode(str, startPos)
-        table.insert(array,object)
+        table.insert(array, object)
     end
 end
 
@@ -137,22 +137,22 @@ local function decodeObject(str, startPos)
     startPos = startPos + 1
     while true do
         local curChar = string.sub(str, startPos, startPos)
-        if curChar == '}' then
+        if curChar == "}" then
             return object, startPos + 1
         end
-        if curChar == ',' then
+        if curChar == "," then
             startPos = startPos + 1
         end
         key, startPos = json.decode(str, startPos)
         startPos = startPos + 1
         value, startPos = json.decode(str, startPos)
-        object[key]=value
+        object[key] = value
     end
 end
 
 local function decodeOther(str, startPos)
-    for k,v in pairs(_otherNames) do
-        if string.sub(str, startPos, startPos + string.len(v) -1 ) == v then
+    for k, v in pairs(_otherNames) do
+        if string.sub(str, startPos, startPos + string.len(v) - 1) == v then
             return _otherChars[v], startPos + string.len(v)
         end
     end
@@ -170,11 +170,11 @@ function json.decode(str, pos)
         return decodeString(str, pos)
     end
     -- object
-    if cur == '{' then
+    if cur == "{" then
         return decodeObject(str, pos)
     end
     -- table
-    if cur == '[' then
+    if cur == "[" then
         return decodeArray(str, pos)
     end
     return decodeOther(str, pos)
