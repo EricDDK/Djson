@@ -30,3 +30,8 @@
 *.exe
 *.out
 *.app
+
+# vs
+*.VC.db
+*.VC.VC.opendb
+cplusplus/Djson/.vs
