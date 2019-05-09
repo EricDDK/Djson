@@ -8,6 +8,10 @@ add_library(
     src/Json.h
     src/Value.cpp 
     src/Value.h
+    src/Generator.cpp 
+    src/Generator.h
+    src/Parser.cpp 
+    src/Parser.h
 )
 
 add_executable(

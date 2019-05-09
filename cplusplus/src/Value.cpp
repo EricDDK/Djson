@@ -34,7 +34,7 @@ void Value::setObject(const std::vector<std::pair<std::string, Value>> &obj)
 		free();
 		_type = JsonType::Object;
 		_object = std::vector<std::pair<std::string, Value>>(obj);
-	}		
+	}
 }
 
 void Value::setArray(const std::vector<Value> &arr)
