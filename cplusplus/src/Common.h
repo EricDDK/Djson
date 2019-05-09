@@ -1,6 +1,8 @@
 #ifndef _DJSON_COMMON_H__
 #define _DJSON_COMMON_H__
 
+#include <assert.h>
+
 #define DJSON_NAMESPACE_START namespace Djson {
 #define DJSON_NAMESPACE_END }
 #define DJSON_NAMESPACE_USE using namespace Djson ;
