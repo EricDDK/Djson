@@ -35,3 +35,6 @@
 *.VC.db
 *.VC.VC.opendb
 cplusplus/Djson/.vs
+[Dd]ebug/
+[Rr]elease/
+build/
