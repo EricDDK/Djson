@@ -37,6 +37,15 @@ public:
 	void removeObjectValue(size_t index);
 	void clearObject();
 
+	void setType(JsonType t);
+	JsonType getType() const;
+
+	void setNumber(double d);
+	double getNumber() const;
+
+	void setString(std::string &d);
+	const std::string& getString() const;
+
 private:
 	Djson::JsonType _type = Djson::JsonType::Null;
 	union

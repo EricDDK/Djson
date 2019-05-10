@@ -181,6 +181,40 @@ void Value::free()
 	}
 }
 
+void Value::setType(JsonType t)
+{
+	_type = t;
+}
+
+JsonType Value::getType() const
+{
+	return _type;
+}
+
+void Value::setNumber(double d)
+{
+	assert(_type == JsonType::Number);
+	_num = d;
+}
+
+double Value::getNumber() const
+{
+	assert(_type == JsonType::Number);
+	return _num;
+}
+
+void Value::setString(std::string &d)
+{
+	assert(_type == JsonType::String);
+	_str = d;
+}
+
+const std::string& Value::getString() const
+{
+	assert(_type == JsonType::String);
+	return _str;
+}
+
 bool operator==(const Value &lhs, const Value &rhs)
 {
 	if (lhs._type != rhs._type)
