@@ -25,7 +25,7 @@ Value& Value::operator=(const Value &rhs)
 	return *this;
 }
 
-void Value::setObject(const std::vector<std::pair<std::string, Value>> &obj)
+void Value::setObject(const std::unordered_map<std::string, Djson::Value> &obj)
 {
 	if (_type == JsonType::Object)
 		_object = obj;
@@ -33,7 +33,7 @@ void Value::setObject(const std::vector<std::pair<std::string, Value>> &obj)
 	{
 		free();
 		_type = JsonType::Object;
-		_object = std::vector<std::pair<std::string, Value>>(obj);
+		_object = std::unordered_map<std::string, Djson::Value>(obj);
 	}
 }
 
@@ -94,11 +94,7 @@ void Value::clearArray()
 void Value::setObjectValue(const std::string &key, const Value &val)
 {
 	assert(_type == JsonType::Object);
-	auto index = findObjectIndex(key);
-	if (index > 0)
-		_object[index].second = val;
-	else
-		_object.push_back(make_pair(key, val));
+	_object[key] = val;
 }
 
 const size_t Value::getObjectSize() const
@@ -107,33 +103,13 @@ const size_t Value::getObjectSize() const
 	return _object.size();
 }
 
-const std::string& Value::getObjectKey(size_t index) const
-{
-	assert(_type == JsonType::Object && index < _object.size());
-	return _object[index].first;
-}
-
-const Value& Value::getObjectValue(size_t index) const
-{
-	assert(_type == JsonType::Object && index < _object.size());
-	return _object[index].second;
-}
-
-
-long long Value::findObjectIndex(const std::string &key)
+const Value& Value::getObjectValue(const std::string &key) const
 {
 	assert(_type == JsonType::Object);
-	for (int i = 0; i < _object.size(); ++i) {
-		if (_object[i].first == key)
-			return i;
-	}
-	return -1;
-}
-
-void Value::removeObjectValue(size_t index)
-{
-	assert(_type == JsonType::Object);
-	_object.erase(_object.begin() + index, _object.begin() + index + 1);
+	if (_object.count(key))
+		return _object.at(key);
+	else
+		throw;
 }
 
 void Value::clearObject()
@@ -155,7 +131,7 @@ void Value::init(const Value &rhs)
 		_array = std::vector<Value>(rhs._array);
 		break;
 	case Djson::JsonType::Object:
-		_object = std::vector<std::pair<std::string, Value>>(rhs._object);
+		_object = std::unordered_map<std::string, Djson::Value>(rhs._object);
 		break;
 	default:
 		break;
@@ -174,7 +150,7 @@ void Value::free()
 		_array.~vector<Value>();
 		break;
 	case Djson::JsonType::Object:
-		_object.~vector<std::pair<std::string, Value>>();
+		_object.clear();
 		break;
 	default:
 		break;
@@ -213,6 +189,20 @@ const std::string& Value::getString() const
 {
 	assert(_type == JsonType::String);
 	return _str;
+}
+
+const Value& Value::operator[](const std::string &key) const
+{
+	if (_object.count(key))
+		return _object.at(key);
+	throw;
+}
+
+Value& Value::operator[](const std::string &key)
+{
+	if (_object.count(key))
+		return _object.at(key);
+	throw;
 }
 
 bool operator==(const Value &lhs, const Value &rhs)
