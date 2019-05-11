@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <unordered_map>
 #include "Common.h"
 
 DJSON_NAMESPACE_START
@@ -29,12 +30,10 @@ public:
 	void clearArray();
 
 	void setObjectValue(const std::string &key, const Value &val);
-	void setObject(const std::vector<std::pair<std::string, Value>> &obj);
+	void setObject(const std::unordered_map<std::string, Djson::Value> &obj);
+	const std::unordered_map<std::string, Djson::Value> getObject() const { return _object; }
 	const size_t getObjectSize() const;
-	const std::string& getObjectKey(size_t index) const;
-	const Value& getObjectValue(size_t index) const;
-	long long findObjectIndex(const std::string &key);
-	void removeObjectValue(size_t index);
+	const Value& getObjectValue(const std::string &key) const;
 	void clearObject();
 
 	void setType(JsonType t);
@@ -46,6 +45,9 @@ public:
 	void setString(std::string &d);
 	const std::string& getString() const;
 
+	const Value& operator[](const std::string&) const;
+	Value& operator[](const std::string&);
+
 private:
 	Djson::JsonType _type = Djson::JsonType::Null;
 	union
@@ -53,7 +55,8 @@ private:
 		double _num;
 		std::string _str;
 		std::vector<Djson::Value> _array;
-		std::vector<std::pair<std::string, Djson::Value>> _object;
+		//std::vector<std::pair<std::string, Djson::Value>> _object;
+		std::unordered_map<std::string, Djson::Value> _object;
 	};
 	friend bool operator==(const Value &lhs, const Value &rhs);
 };

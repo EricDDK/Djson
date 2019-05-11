@@ -42,16 +42,20 @@ void Generator::stringifyValue(const Value &val)
 		_result += ']';
 		break;
 	case JsonType::Object:
+	{
 		_result += '{';
-		for (int i = 0; i < val.getObjectSize(); ++i)
+		size_t i = 0;
+		for (auto &o : val.getObject())
 		{
 			if (i > 0)
 				_result += ',';
-			stringifyString(val.getObjectKey(i));
+			stringifyString(o.first);
 			_result += ':';
-			stringifyValue(val.getObjectValue(i));
+			stringifyValue(o.second);
+			++i;
 		}
-		_result += '}';
+		_result += '}'; 
+	}
 		break;
 	default:
 		break;

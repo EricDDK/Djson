@@ -236,7 +236,7 @@ void Parser::parseObject()
 {
 	expect(_cur, '{');
 	parseWhiteSpace();
-	std::vector<std::pair<std::string, Value>> tmp;
+	std::unordered_map<std::string, Djson::Value> tmp;
 	std::string key;
 	if (*_cur == '}') {
 		++_cur;
@@ -262,7 +262,7 @@ void Parser::parseObject()
 			_val.setType(JsonType::Null);
 			throw;
 		}
-		tmp.push_back(make_pair(key, _val));
+		tmp[key] = _val;
 		_val.setType(JsonType::Null);
 		key.clear();
 		parseWhiteSpace();
