@@ -83,9 +83,8 @@ void Parser::parseNumber()
 			throw (std::logic_error("parse invalid value"));
 		while (isdigit(*++p));
 	}
-	errno = 0;
 	double v = strtod(_cur, NULL);
-	if (errno == ERANGE && (v == HUGE_VAL || v == -HUGE_VAL))
+	if (v == HUGE_VAL || v == -HUGE_VAL)
 		throw (std::logic_error("parse number too big"));
 	_val.setNumber(v);
 	_cur = p;
