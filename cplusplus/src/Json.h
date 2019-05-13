@@ -37,21 +37,21 @@ public:
 	Json(void *) = delete;
 
 public:
-	std::string generate() const;
-	Value parse(const std::string& content);
+	const std::string generate();
+	const Value parse(const std::string& content);
 
 public:
-	void setType(JsonType type) { _json->setType(type); }
-	const JsonType getType() const { return _json->getType(); }
+	void setType(JsonType type) { _json.setType(type); }
+	const JsonType getType() const { return _json.getType(); }
 
-	bool getBool() const { assert(_json->getType() == JsonType::False || _json->getType() == JsonType::True); return _json->getType() == JsonType::True ? true : false; }
-	double getNumber() const { return _json->getNumber(); }
-	const std::string& getString() const { return _json->getString(); }
-	const Array getArray() const { return _json->getArray(); }
-	const Object getObject() const { return _json->getObject(); }
+	bool getBool() const { assert(_json.getType() == JsonType::False || _json.getType() == JsonType::True); return _json.getType() == JsonType::True ? true : false; }
+	double getNumber() const { return _json.getNumber(); }
+	const std::string& getString() const { return _json.getString(); }
+	const Array getArray() const { return _json.getArray(); }
+	const Object getObject() const { return _json.getObject(); }
 	
 private:
-	std::unique_ptr<Djson::Value> _json;
+	Djson::Value _json;
 
 };
 

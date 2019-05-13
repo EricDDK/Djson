@@ -7,16 +7,16 @@ Json::Json(const Json& rhs)
 	switch (rhs.getType())
 	{
 	case JsonType::Number:
-		_json = std::make_unique<Value>(rhs.getNumber());
+		_json = Value(rhs.getNumber());
 		break;
 	case JsonType::String:
-		_json = std::make_unique<Value>(rhs.getString());
+		_json = Value(rhs.getString());
 		break;
 	case JsonType::Array:
-		_json = std::make_unique<Value>(rhs.getArray());
+		_json = Value(rhs.getArray());
 		break;
 	case JsonType::Object:
-		_json = std::make_unique<Value>(rhs.getObject());
+		_json = Value(rhs.getObject());
 		break;
 	default:
 		break;
@@ -25,38 +25,38 @@ Json::Json(const Json& rhs)
 }
 
 Json::Json(std::nullptr_t)
-	:_json(std::make_unique<Djson::Value>(nullptr)) {}
+	:_json(Value(nullptr)) {}
 Json::Json(bool b)
-	: _json(std::make_unique<Djson::Value>(b)) {}
+	: _json(Value(b)) {}
 Json::Json(int i)
-	: _json(std::make_unique<Djson::Value>(1.0 * i)) {}
+	: _json(Value(1.0 * i)) {}
 Json::Json(double d)
-	: _json(std::make_unique<Djson::Value>(d)) {}
+	: _json(Value(d)) {}
 Json::Json(const char* c)
-	: _json(std::make_unique<Djson::Value>(c)) {}
+	: _json(Value(c)) {}
 Json::Json(const std::string& s)
-	: _json(std::make_unique<Djson::Value>(s)) {}
+	: _json(Value(s)) {}
 Json::Json(std::string&& s)
-	: _json(std::make_unique<Djson::Value>(std::move(s))) {}
+	: _json(Value(std::move(s))) {}
 Json::Json(const Array& a)
-	: _json(std::make_unique<Djson::Value>(a)) {}
+	: _json(Value(a)) {}
 Json::Json(Array&& a)
-	: _json(std::make_unique<Djson::Value>(std::move(a))) {}
+	: _json(Value(std::move(a))) {}
 Json::Json(const Object& o)
-	: _json(std::make_unique<Djson::Value>(o)) {}
+	: _json(Value(o)) {}
 Json::Json(Object&& o)
-	: _json(std::make_unique<Djson::Value>(std::move(o))) {}
+	: _json(Value(std::move(o))) {}
 
-std::string Json::generate() const
+const std::string Json::generate()
 {
 	std::string result;
-	Generator(_json->getValue(), result);
+	Generator(_json.getValue(), result);
 	return result;
 }
 
-Value Json::parse(const std::string& content)
+const Value Json::parse(const std::string& content)
 {
-	Value v = _json->getValue();
+	Value v = _json.getValue();
 	Parser(v, content);
 	return v;
 }
