@@ -11,7 +11,7 @@
 
 DJSON_NAMESPACE_START
 
-	enum class JsonType : int
+	enum class JsonType
 	{
 		Null,
 		True,
