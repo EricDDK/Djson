@@ -140,13 +140,13 @@ void Value::init(const Value &rhs)
 		_num = rhs._num;
 		break;
 	case Djson::JsonType::String:
-		new(&_str) std::string(rhs._str);
+		_str = std::string(rhs._str);
 		break;
 	case Djson::JsonType::Array:
-		new(&_array) std::vector<Value>(rhs._array);
+		_array = std::vector<Value>(rhs._array);
 		break;
 	case Djson::JsonType::Object:
-		new(&_object) std::unordered_map<std::string, Djson::Value>(rhs._object);
+		_object = std::unordered_map<std::string, Djson::Value>(rhs._object);
 		break;
 	default:
 		break;
