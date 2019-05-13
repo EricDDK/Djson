@@ -3,9 +3,10 @@
 DJSON_NAMESPACE_START
 
 Generator::Generator(const Value &val, std::string &result)
-	:_result(result)
+	:_result("")
 {
 	stringifyValue(val);
+	result = _result;
 }
 
 void Generator::stringifyValue(const Value &val)

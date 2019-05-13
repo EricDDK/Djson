@@ -20,6 +20,7 @@ Parser::Parser(Value &val, const std::string &result)
 	{
 		throw(std::logic_error("parse root error, not end"));
 	}
+	val = _val;
 }
 
 void Parser::parseWhiteSpace()
@@ -43,8 +44,20 @@ void Parser::parseValue()
 	case 'f':
 		parseLiteral("false", JsonType::False);
 		return;
-	default:
+	case '\"': 
+		parseString(); 
 		return;
+	case '[': 
+		parseArray();  
+		return;
+	case '{': 
+		parseObject(); 
+		return;
+	default:
+		parseNumber();
+		return;
+	case '\0': 
+		throw(std::logic_error("parse expect value"));
 	}
 }
 

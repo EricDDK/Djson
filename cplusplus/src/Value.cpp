@@ -3,7 +3,7 @@
 DJSON_NAMESPACE_START
 
 Value::Value()
-	//:_num(0)
+	:_num(0)
 {
 
 }
@@ -37,6 +37,12 @@ void Value::setObject(const std::unordered_map<std::string, Djson::Value> &obj)
 	}
 }
 
+const std::unordered_map<std::string, Djson::Value> Value::getObject() const
+{
+	assert(_type == JsonType::Object);
+	return _object;
+}
+
 void Value::setArray(const std::vector<Value> &arr)
 {
 	if (_type == JsonType::Array)
@@ -47,6 +53,12 @@ void Value::setArray(const std::vector<Value> &arr)
 		_type = JsonType::Array;
 		_array = std::vector<Value>(arr);
 	}
+}
+
+const std::vector<Value> Value::getArray() const
+{
+	assert(_type == JsonType::Array);
+	return _array;
 }
 
 void Value::pushbackArrayElement(const Value& val)
@@ -124,6 +136,9 @@ void Value::init(const Value &rhs)
 	_num = 0;
 	switch (_type)
 	{
+	case Djson::JsonType::Number:
+		_num = rhs._num;
+		break;
 	case Djson::JsonType::String:
 		_str = std::string(rhs._str);
 		break;
@@ -144,10 +159,12 @@ void Value::free()
 	switch (_type)
 	{
 	case Djson::JsonType::String:
-		_str.~string();
+		//_str.~string();
+		_str.clear();
 		break;
 	case Djson::JsonType::Array:
-		_array.~vector<Value>();
+		//_array.~vector<Value>();
+		_array.clear();
 		break;
 	case Djson::JsonType::Object:
 		_object.clear();
@@ -159,18 +176,20 @@ void Value::free()
 
 void Value::setType(JsonType t)
 {
+	free();
 	_type = t;
 }
 
-JsonType Value::getType() const
+const JsonType Value::getType() const
 {
 	return _type;
 }
 
 void Value::setNumber(double d)
 {
-	assert(_type == JsonType::Number);
+	free();
 	_num = d;
+	_type = JsonType::Number;
 }
 
 double Value::getNumber() const
@@ -179,10 +198,16 @@ double Value::getNumber() const
 	return _num;
 }
 
-void Value::setString(std::string &d)
+void Value::setString(std::string &s)
 {
-	assert(_type == JsonType::String);
-	_str = d;
+	if (_type == JsonType::String)
+		_str = s;
+	else
+	{
+		free();
+		_str = s;
+		_type = JsonType::String;
+	}
 }
 
 const std::string& Value::getString() const
