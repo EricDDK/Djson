@@ -218,6 +218,7 @@ const std::string& Value::getString() const
 
 const Value& Value::operator[](const std::string &key) const
 {
+	assert(_type == JsonType::Object);
 	if (_object.count(key))
 		return _object.at(key);
 	throw;
@@ -225,9 +226,24 @@ const Value& Value::operator[](const std::string &key) const
 
 Value& Value::operator[](const std::string &key)
 {
+	assert(_type == JsonType::Object);
 	if (_object.count(key))
 		return _object.at(key);
 	throw;
+}
+
+const Value& Value::operator[](size_t index) const
+{
+	assert(_type == JsonType::Array);
+	assert(_array.size() > index);
+	return _array[index];
+}
+
+Value& Value::operator[](size_t index)
+{
+	assert(_type == JsonType::Array);
+	assert(_array.size() > index);
+	return _array[index];
 }
 
 bool operator==(const Value &lhs, const Value &rhs)

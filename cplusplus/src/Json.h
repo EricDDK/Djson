@@ -50,6 +50,8 @@ public:
 	const Array getArray() const { return _json.getArray(); }
 	const Object getObject() const { return _json.getObject(); }
 	
+	Value getValue() { return _json.getValue(); }
+
 private:
 	Djson::Value _json;
 
