@@ -3,6 +3,7 @@
 #include <string.h>
 #include "src/Json.h"
 
+#ifdef _MSC_VER
 #define _CRTDBG_MAP_ALLOC   
 #include <stdlib.h>
 #include <crtdbg.h>
@@ -11,7 +12,9 @@
 #define DBG_NEW new (_NORMAL_BLOCK, __FILE__, __LINE__)
 #define new DBG_NEW
 #endif
-#endif  // _DEBUG  
+#endif  // _DEBUG
+#endif
+
 
 DJSON_NAMESPACE_USE;
 
@@ -54,7 +57,9 @@ int main()
 {
 	test1();
 
+#ifdef _MSC_VER
 	_CrtDumpMemoryLeaks();
+#endif
 	system("pause");
 	return 1;
 }
