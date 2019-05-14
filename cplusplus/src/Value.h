@@ -48,6 +48,8 @@ public:
 
 	const Value& operator[](const std::string&) const;
 	Value& operator[](const std::string&);
+	const Value& operator[](size_t index) const;
+	Value& operator[](size_t index);
 
 	Value getValue() { return *this; }
 	//void parse(const std::string &content);
@@ -62,9 +64,9 @@ public:
 	Value(const std::vector<Djson::Value>& a) :_type(Djson::JsonType::Array), _array(a) {}
 	Value(const std::unordered_map<std::string, Djson::Value>& o) :_type(Djson::JsonType::Object), _object(o) {}
 
-	Value(std::string&& s) :_type(Djson::JsonType::String), _str(std::move(s)) {}
+	/*Value(std::string&& s) :_type(Djson::JsonType::String), _str(std::move(s)) {}
 	Value(std::vector<Djson::Value>&& a) :_type(Djson::JsonType::Array), _array(std::move(a)) {}
-	Value(std::unordered_map<std::string, Djson::Value>&& o) :_type(Djson::JsonType::Object), _object(std::move(o)) {}
+	Value(std::unordered_map<std::string, Djson::Value>&& o) :_type(Djson::JsonType::Object), _object(std::move(o)) {}*/
 
 private:
 	Djson::JsonType _type = Djson::JsonType::Null;

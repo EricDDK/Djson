@@ -3,6 +3,16 @@
 #include <string.h>
 #include "src/Json.h"
 
+#define _CRTDBG_MAP_ALLOC   
+#include <stdlib.h>
+#include <crtdbg.h>
+#ifdef _DEBUG
+#ifndef DBG_NEW
+#define DBG_NEW new (_NORMAL_BLOCK, __FILE__, __LINE__)
+#define new DBG_NEW
+#endif
+#endif  // _DEBUG  
+
 DJSON_NAMESPACE_USE;
 
 #define EXPECT(expect, actual) \
@@ -13,26 +23,29 @@ do {\
 
 void test1()
 {
-	Json j1(nullptr);
-	Json j2(1.0);
-	Json j3("test");
-	Json j4();
-	Json j5 = Json::Array{ 0,1,2,3,4 };
-	Json j6 = Json::Object{
+	Djson::Json j1(nullptr);
+	Djson::Json j2(1.0);
+	Djson::Json j3("test");
+	Djson::Json j4();
+	Djson::Json j5 = Djson::Json::Array{ 0,1,2,3,4 };
+	Djson::Json j6 = Djson::Json::Object{
 		{ "key1", "Value" },
 		{ "key2", false },
-		{ "key3", Json::Array{ 0,1,2,3,4 } }
+		{ "key3", Djson::Json::Array{ 0,1,2,3,4 } }
+	};
+	Djson::Json j7 = Djson::Json::Object{
+		{ "key1", j6.getValue() }
 	};
 
 	std::string str = j6.generate();
 	EXPECT(str, "{\"key1\":\"Value\",\"key2\":false,\"key3\":[0,1,2,3,4]}");
 
-	Json j;
+	Djson::Json j;
 	Value v = j.parse(str);
-	EXPECT(v.getType(), JsonType::Object);
+	EXPECT(v.getType(), Djson::JsonType::Object);
 	EXPECT(v.getObject().at("key1").getString(), "Value");
-	EXPECT(v.getObject().at("key2").getType(), JsonType::False);
-	EXPECT(v.getObject().at("key3").getType(), JsonType::Array);
+	EXPECT(v.getObject().at("key2").getType(), Djson::JsonType::False);
+	EXPECT(v.getObject().at("key3").getType(), Djson::JsonType::Array);
 	EXPECT(v.getObject().at("key3").getArray().size(), 5);
 	EXPECT(v.getObject().at("key3").getArray()[0].getNumber(), 0);
 }
@@ -41,6 +54,7 @@ int main()
 {
 	test1();
 
+	_CrtDumpMemoryLeaks();
 	system("pause");
 	return 1;
 }
