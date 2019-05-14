@@ -5,24 +5,6 @@
 
 json = json or {}
 
-local _encodeMap = {
-    ["nil"] = function(object)
-        return "null"
-    end,
-    ["string"] = function(object)
-        return '"' .. object .. '"'
-    end,
-    ["number"] = function(object)
-        return tostring(object)
-    end,
-    ["boolean"] = function(object)
-        return tostring(object)
-    end,
-    ["function"] = function(object)
-        return "null"
-    end
-}
-
 local function isArray(t)
     local maxIndex = 0
     for k, v in pairs(t) do
@@ -34,6 +16,33 @@ local function isArray(t)
     end
     return true, maxIndex
 end
+
+local function encodeString(str)
+    str = string.gsub(str,'\\','\\\\')
+    str = string.gsub(str,'"','\\"')
+    str = string.gsub(str,"'","\\'")
+    str = string.gsub(str,'\n','\\n')
+    str = string.gsub(str,'\t','\\t')
+    return str
+end
+
+local _encodeMap = {
+    ["nil"] = function(n)
+        return "null"
+    end,
+    ["string"] = function(s)
+        return '"' .. encodeString(s) .. '"'
+    end,
+    ["number"] = function(n)
+        return tostring(n)
+    end,
+    ["boolean"] = function(b)
+        return tostring(b)
+    end,
+    ["function"] = function(f)
+        return "null"
+    end
+}
 
 --[[
     encode the json object
@@ -118,12 +127,13 @@ local function decodeArray(str, startPos)
     local len = string.len(str)
     startPos = startPos + 1
     while true do
+        startPos = scanWhiteSpace(str, startPos)
         local curChar = string.sub(str, startPos, startPos)
         if curChar == "]" then
             return array, startPos + 1
         end
         if curChar == "," then
-            startPos = startPos + 1
+            startPos = scanWhiteSpace(str, startPos + 1)
         end
         local object = json.decode(str, startPos)
         table.insert(array, object)
@@ -136,15 +146,18 @@ local function decodeObject(str, startPos)
     local key, value
     startPos = startPos + 1
     while true do
+        startPos = scanWhiteSpace(str, startPos)
         local curChar = string.sub(str, startPos, startPos)
         if curChar == "}" then
             return object, startPos + 1
         end
         if curChar == "," then
-            startPos = startPos + 1
+            startPos = scanWhiteSpace(str, startPos + 1)
         end
         key, startPos = json.decode(str, startPos)
+        startPos = scanWhiteSpace(str, startPos)
         startPos = startPos + 1
+        startPos = scanWhiteSpace(str, startPos)
         value, startPos = json.decode(str, startPos)
         object[key] = value
     end
@@ -160,6 +173,7 @@ end
 
 function json.decode(str, pos)
     pos = pos or 1
+    pos = scanWhiteSpace(str, pos)
     local cur = string.sub(str, pos, pos)
     -- number
     if string.find(_numberChars, cur, 1, true) then
