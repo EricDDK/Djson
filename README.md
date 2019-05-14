@@ -35,7 +35,7 @@ str = json.encode(data)  -- generate
 ```
 
 # Test:
-Djson-c++: 230 seconds
-Djson-lua: 3600 secends
-cjson: 160 seconds
+* Djson-c++: 230 seconds 
+* Djson-lua: 3600 secends 
+* cjson: 160 seconds 
 
