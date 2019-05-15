@@ -12,8 +12,7 @@ DJSON_NAMESPACE_START
 class Json
 {
 public:
-	using Array = std::vector<Djson::Value>;
-	using Object = std::unordered_map<std::string, Djson::Value>;
+	
 
 public:
 	Json() :Json(nullptr) {};
@@ -29,10 +28,10 @@ public:
 	Json(const char* c);
 	Json(const std::string& s);
 	Json(std::string&& s);
-	Json(const Array& a);
-	Json(Array&& a);
-	Json(const Object& o);
-	Json(Object&& o);
+	Json(const DjsonArray& a);
+	Json(DjsonArray&& a);
+	Json(const DjsonObject& o);
+	Json(DjsonObject&& o);
 
 	Json(void *) = delete;
 
@@ -44,11 +43,11 @@ public:
 	void setType(JsonType type) { _json.setType(type); }
 	const JsonType getType() const { return _json.getType(); }
 
-	bool getBool() const { assert(_json.getType() == JsonType::False || _json.getType() == JsonType::True); return _json.getType() == JsonType::True ? true : false; }
+	bool getBool() const { assert(_json.getType() == JsonType::kFalse || _json.getType() == JsonType::kTrue); return _json.getType() == JsonType::kTrue ? true : false; }
 	double getNumber() const { return _json.getNumber(); }
 	const std::string& getString() const { return _json.getString(); }
-	const Array getArray() const { return _json.getArray(); }
-	const Object getObject() const { return _json.getObject(); }
+	const DjsonArray getArray() const { return _json.getArray(); }
+	const DjsonObject getObject() const { return _json.getObject(); }
 	
 	Value getValue() { return _json.getValue(); }
 

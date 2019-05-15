@@ -25,99 +25,99 @@ Value& Value::operator=(const Value &rhs)
 	return *this;
 }
 
-void Value::setObject(const std::unordered_map<std::string, Djson::Value> &obj)
+void Value::setObject(const DjsonObject &obj)
 {
-	if (_type == JsonType::Object)
+	if (_type == JsonType::kObject)
 		_object = obj;
 	else
 	{
 		free();
-		_type = JsonType::Object;
-		_object = std::unordered_map<std::string, Djson::Value>(obj);
+		_type = JsonType::kObject;
+		_object = DjsonObject(obj);
 	}
 }
 
-const std::unordered_map<std::string, Djson::Value> Value::getObject() const
+const DjsonObject Value::getObject() const
 {
-	assert(_type == JsonType::Object);
+	assert(_type == JsonType::kObject);
 	return _object;
 }
 
-void Value::setArray(const std::vector<Value> &arr)
+void Value::setArray(const DjsonArray &arr)
 {
-	if (_type == JsonType::Array)
+	if (_type == JsonType::kArray)
 		_array = arr;
 	else
 	{
 		free();
-		_type = JsonType::Array;
-		_array = std::vector<Value>(arr);
+		_type = JsonType::kArray;
+		_array = DjsonArray(arr);
 	}
 }
 
-const std::vector<Value> Value::getArray() const
+const DjsonArray Value::getArray() const
 {
-	assert(_type == JsonType::Array);
+	assert(_type == JsonType::kArray);
 	return _array;
 }
 
 void Value::pushbackArrayElement(const Value& val)
 {
-	assert(_type == JsonType::Array);
+	assert(_type == JsonType::kArray);
 	_array.push_back(val);
 }
 
 const Value& Value::getArrayElement(size_t index) const
 {
-	assert(_type == JsonType::Array);
+	assert(_type == JsonType::kArray);
 	return _array[index];
 }
 
 size_t Value::getArraySize() const
 {
-	assert(_type == JsonType::Array);
+	assert(_type == JsonType::kArray);
 	return _array.size();
 }
 
 void Value::popbackArrayElement()
 {
-	assert(_type == JsonType::Array);
+	assert(_type == JsonType::kArray);
 	_array.pop_back();
 }
 
 void Value::insertArrayElement(const Value &val, size_t index)
 {
-	assert(_type == JsonType::Array);
+	assert(_type == JsonType::kArray);
 	_array.insert(_array.begin() + index, val);
 }
 
 void Value::eraseArrayElement(size_t index, size_t count)
 {
-	assert(_type == JsonType::Array);
+	assert(_type == JsonType::kArray);
 	_array.erase(_array.begin() + index, _array.begin() + index + count);
 }
 
 void Value::clearArray()
 {
-	assert(_type == JsonType::Array);
+	assert(_type == JsonType::kArray);
 	_array.clear();
 }
 
 void Value::setObjectValue(const std::string &key, const Value &val)
 {
-	assert(_type == JsonType::Object);
+	assert(_type == JsonType::kObject);
 	_object[key] = val;
 }
 
 const size_t Value::getObjectSize() const
 {
-	assert(_type == JsonType::Object);
+	assert(_type == JsonType::kObject);
 	return _object.size();
 }
 
 const Value& Value::getObjectValue(const std::string &key) const
 {
-	assert(_type == JsonType::Object);
+	assert(_type == JsonType::kObject);
 	if (_object.count(key))
 		return _object.at(key);
 	else
@@ -126,7 +126,7 @@ const Value& Value::getObjectValue(const std::string &key) const
 
 void Value::clearObject()
 {
-	assert(_type == JsonType::Object);
+	assert(_type == JsonType::kObject);
 	_object.clear();
 }
 
@@ -136,17 +136,17 @@ void Value::init(const Value &rhs)
 	_num = 0;
 	switch (_type)
 	{
-	case Djson::JsonType::Number:
+	case Djson::JsonType::kNumber:
 		_num = rhs._num;
 		break;
-	case Djson::JsonType::String:
+	case Djson::JsonType::kString:
 		_str = std::string(rhs._str);
 		break;
-	case Djson::JsonType::Array:
-		_array = std::vector<Value>(rhs._array);
+	case Djson::JsonType::kArray:
+		_array = DjsonArray(rhs._array);
 		break;
-	case Djson::JsonType::Object:
-		_object = std::unordered_map<std::string, Djson::Value>(rhs._object);
+	case Djson::JsonType::kObject:
+		_object = DjsonObject(rhs._object);
 		break;
 	default:
 		break;
@@ -158,15 +158,15 @@ void Value::free()
 	using std::string;
 	switch (_type)
 	{
-	case Djson::JsonType::String:
+	case Djson::JsonType::kString:
 		//_str.~string();
 		_str.clear();
 		break;
-	case Djson::JsonType::Array:
+	case Djson::JsonType::kArray:
 		//_array.~vector<Value>();
 		_array.clear();
 		break;
-	case Djson::JsonType::Object:
+	case Djson::JsonType::kObject:
 		_object.clear();
 		break;
 	default:
@@ -189,36 +189,36 @@ void Value::setNumber(double d)
 {
 	free();
 	_num = d;
-	_type = JsonType::Number;
+	_type = JsonType::kNumber;
 }
 
 double Value::getNumber() const
 {
-	assert(_type == JsonType::Number);
+	assert(_type == JsonType::kNumber);
 	return _num;
 }
 
 void Value::setString(std::string &s)
 {
-	if (_type == JsonType::String)
+	if (_type == JsonType::kString)
 		_str = s;
 	else
 	{
 		free();
 		_str = s;
-		_type = JsonType::String;
+		_type = JsonType::kString;
 	}
 }
 
 const std::string& Value::getString() const
 {
-	assert(_type == JsonType::String);
+	assert(_type == JsonType::kString);
 	return _str;
 }
 
 const Value& Value::operator[](const std::string &key) const
 {
-	assert(_type == JsonType::Object);
+	assert(_type == JsonType::kObject);
 	if (_object.count(key))
 		return _object.at(key);
 	throw;
@@ -226,7 +226,7 @@ const Value& Value::operator[](const std::string &key) const
 
 Value& Value::operator[](const std::string &key)
 {
-	assert(_type == JsonType::Object);
+	assert(_type == JsonType::kObject);
 	if (_object.count(key))
 		return _object.at(key);
 	throw;
@@ -234,14 +234,14 @@ Value& Value::operator[](const std::string &key)
 
 const Value& Value::operator[](size_t index) const
 {
-	assert(_type == JsonType::Array);
+	assert(_type == JsonType::kArray);
 	assert(_array.size() > index);
 	return _array[index];
 }
 
 Value& Value::operator[](size_t index)
 {
-	assert(_type == JsonType::Array);
+	assert(_type == JsonType::kArray);
 	assert(_array.size() > index);
 	return _array[index];
 }
@@ -252,15 +252,15 @@ bool operator==(const Value &lhs, const Value &rhs)
 		return false;
 	switch (rhs._type)
 	{
-	case Djson::JsonType::Null:
+	case Djson::JsonType::kNull:
 		return true;
-	case Djson::JsonType::Number:
+	case Djson::JsonType::kNumber:
 		return lhs._num == rhs._num;
-	case Djson::JsonType::String:
+	case Djson::JsonType::kString:
 		return lhs._str == rhs._str;
-	case Djson::JsonType::Array:
+	case Djson::JsonType::kArray:
 		return lhs._array == rhs._array;
-	case Djson::JsonType::Object:
+	case Djson::JsonType::kObject:
 		if (lhs.getObjectSize() != rhs.getObjectSize())
 			return false;
 		for (int i = 0; i < lhs.getObjectSize(); ++i)

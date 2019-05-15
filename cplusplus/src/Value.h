@@ -20,8 +20,8 @@ public:
 
 	Value& operator=(const Value &rhs);
 
-	void setArray(const std::vector<Value> &arr);
-	const std::vector<Value> getArray() const;
+	void setArray(const DjsonArray &arr);
+	const DjsonArray getArray() const;
 	void pushbackArrayElement(const Value& val);
 	size_t getArraySize() const;
 	const Value& getArrayElement(size_t index) const;
@@ -31,8 +31,8 @@ public:
 	void clearArray();
 
 	void setObjectValue(const std::string &key, const Value &val);
-	void setObject(const std::unordered_map<std::string, Djson::Value> &obj);
-	const std::unordered_map<std::string, Djson::Value> getObject() const;
+	void setObject(const DjsonObject &obj);
+	const DjsonObject getObject() const;
 	const size_t getObjectSize() const;
 	const Value& getObjectValue(const std::string &key) const;
 	void clearObject();
@@ -55,25 +55,25 @@ public:
 	//void parse(const std::string &content);
 
 public:
-	Value(std::nullptr_t) :_type(Djson::JsonType::Null) {}
-	Value(bool b) :_type(b ? Djson::JsonType::True : Djson::JsonType::False) {}
+	Value(std::nullptr_t) :_type(Djson::JsonType::kNull) {}
+	Value(bool b) :_type(b ? Djson::JsonType::kTrue : Djson::JsonType::kFalse) {}
 	Value(int i) :Value(1.0 * i) {}
-	Value(double d) :_type(Djson::JsonType::Number), _num(d) {}
-	Value(const char* s) :_type(Djson::JsonType::String), _str(s) {}
-	Value(const std::string& s) :_type(Djson::JsonType::String), _str(s) {}
-	Value(const std::vector<Djson::Value>& a) :_type(Djson::JsonType::Array), _array(a) {}
-	Value(const std::unordered_map<std::string, Djson::Value>& o) :_type(Djson::JsonType::Object), _object(o) {}
+	Value(double d) :_type(Djson::JsonType::kNumber), _num(d) {}
+	Value(const char* s) :_type(Djson::JsonType::kString), _str(s) {}
+	Value(const std::string& s) :_type(Djson::JsonType::kString), _str(s) {}
+	Value(const DjsonArray& a) :_type(Djson::JsonType::kArray), _array(a) {}
+	Value(const DjsonObject& o) :_type(Djson::JsonType::kObject), _object(o) {}
 
-	/*Value(std::string&& s) :_type(Djson::JsonType::String), _str(std::move(s)) {}
-	Value(std::vector<Djson::Value>&& a) :_type(Djson::JsonType::Array), _array(std::move(a)) {}
-	Value(std::unordered_map<std::string, Djson::Value>&& o) :_type(Djson::JsonType::Object), _object(std::move(o)) {}*/
+	/*Value(std::string&& s) :_type(Djson::JsonType::kString), _str(std::move(s)) {}
+	Value(DjsonArray&& a) :_type(Djson::JsonType::kArray), _array(std::move(a)) {}
+	Value(DjsonObject&& o) :_type(Djson::JsonType::kObject), _object(std::move(o)) {}*/
 
 private:
-	Djson::JsonType _type = Djson::JsonType::Null;
+	Djson::JsonType _type = Djson::JsonType::kNull;
 	double _num;
 	std::string _str;
-	std::vector<Djson::Value> _array;
-	std::unordered_map<std::string, Djson::Value> _object;
+	DjsonArray _array;
+	DjsonObject _object;
 	friend bool operator==(const Value &lhs, const Value &rhs);
 };
 

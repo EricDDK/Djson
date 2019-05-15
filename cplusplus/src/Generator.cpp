@@ -13,26 +13,26 @@ void Generator::stringifyValue(const Value &val)
 {
 	switch (val.getType())
 	{
-	case JsonType::Null:
+	case JsonType::kNull:
 		_result += "null";
 		break;
-	case JsonType::True:
+	case JsonType::kTrue:
 		_result += "true";
 		break;
-	case JsonType::False:
+	case JsonType::kFalse:
 		_result += "false";
 		break;
-	case JsonType::Number:
+	case JsonType::kNumber:
 	{
 		char buffer[32] = { 0 };
 		sprintf(buffer, "%.17g", val.getNumber());
 		_result += buffer;
 	}
 	break;
-	case JsonType::String:
+	case JsonType::kString:
 		stringifyString(val.getString());
 		break;
-	case JsonType::Array:
+	case JsonType::kArray:
 		_result += '[';
 		for (int i = 0; i < val.getArraySize(); ++i)
 		{
@@ -42,7 +42,7 @@ void Generator::stringifyValue(const Value &val)
 		}
 		_result += ']';
 		break;
-	case JsonType::Object:
+	case JsonType::kObject:
 	{
 		_result += '{';
 		size_t i = 0;

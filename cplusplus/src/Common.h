@@ -11,15 +11,18 @@
 
 DJSON_NAMESPACE_START
 
+#define DjsonArray std::vector<Djson::Value>
+#define DjsonObject std::unordered_map<std::string, Djson::Value>
+
 	enum class JsonType
 	{
-		Null,
-		True,
-		False,
-		Number,
-		String,
-		Array,
-		Object
+		kNull,
+		kTrue,
+		kFalse,
+		kNumber,
+		kString,
+		kArray,
+		kObject
 	};
 
 DJSON_NAMESPACE_END
