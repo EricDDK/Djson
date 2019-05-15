@@ -6,16 +6,16 @@ Json::Json(const Json& rhs)
 {
 	switch (rhs.getType())
 	{
-	case JsonType::Number:
+	case JsonType::kNumber:
 		_json = Value(rhs.getNumber());
 		break;
-	case JsonType::String:
+	case JsonType::kString:
 		_json = Value(rhs.getString());
 		break;
-	case JsonType::Array:
+	case JsonType::kArray:
 		_json = Value(rhs.getArray());
 		break;
-	case JsonType::Object:
+	case JsonType::kObject:
 		_json = Value(rhs.getObject());
 		break;
 	default:
@@ -38,13 +38,13 @@ Json::Json(const std::string& s)
 	: _json(Value(s)) {}
 Json::Json(std::string&& s)
 	: _json(Value(std::move(s))) {}
-Json::Json(const Array& a)
+Json::Json(const DjsonArray& a)
 	: _json(Value(a)) {}
-Json::Json(Array&& a)
+Json::Json(DjsonArray&& a)
 	: _json(Value(std::move(a))) {}
-Json::Json(const Object& o)
+Json::Json(const DjsonObject& o)
 	: _json(Value(o)) {}
-Json::Json(Object&& o)
+Json::Json(DjsonObject&& o)
 	: _json(Value(std::move(o))) {}
 
 const std::string Json::generate()

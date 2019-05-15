@@ -12,7 +12,7 @@ Parser::Parser(Value &val, const std::string &result)
 	:_val(val)
 	, _cur(result.c_str())
 {
-	_val.setType(JsonType::Null);
+	_val.setType(JsonType::kNull);
 	parseWhiteSpace();
 	parseValue();
 	parseWhiteSpace();
@@ -36,13 +36,13 @@ void Parser::parseValue()
 	switch (*_cur)
 	{
 	case 'n':
-		parseLiteral("null", JsonType::Null);
+		parseLiteral("null", JsonType::kNull);
 		return;
 	case 't':
-		parseLiteral("true", JsonType::True);
+		parseLiteral("true", JsonType::kTrue);
 		return;
 	case 'f':
-		parseLiteral("false", JsonType::False);
+		parseLiteral("false", JsonType::kFalse);
 		return;
 	case '\"': 
 		parseString(); 
@@ -202,7 +202,7 @@ void Parser::parseArray()
 {
 	expect(_cur, '[');
 	parseWhiteSpace();
-	std::vector<Value> tmp;
+	DjsonArray tmp;
 	if (*_cur == ']')
 	{
 		++_cur;
@@ -219,7 +219,7 @@ void Parser::parseArray()
 			}
 			catch (std::logic_error)
 			{
-				_val.setType(JsonType::Null);
+				_val.setType(JsonType::kNull);
 				throw;
 			}
 			tmp.push_back(_val);
@@ -237,7 +237,7 @@ void Parser::parseArray()
 			}
 			else
 			{
-				_val.setType(JsonType::Null);
+				_val.setType(JsonType::kNull);
 				throw (std::logic_error("parse invalid array"));
 			}
 		}
@@ -248,7 +248,7 @@ void Parser::parseObject()
 {
 	expect(_cur, '{');
 	parseWhiteSpace();
-	std::unordered_map<std::string, Djson::Value> tmp;
+	DjsonObject tmp;
 	std::string key;
 	if (*_cur == '}') {
 		++_cur;
@@ -271,11 +271,11 @@ void Parser::parseObject()
 			parseValue();
 		}
 		catch (std::logic_error) {
-			_val.setType(JsonType::Null);
+			_val.setType(JsonType::kNull);
 			throw;
 		}
 		tmp[key] = _val;
-		_val.setType(JsonType::Null);
+		_val.setType(JsonType::kNull);
 		key.clear();
 		parseWhiteSpace();
 		if (*_cur == ',') {
@@ -288,7 +288,7 @@ void Parser::parseObject()
 			return;
 		}
 		else {
-			_val.setType(JsonType::Null);
+			_val.setType(JsonType::kNull);
 			throw(std::logic_error("parse miss comma or curly bracket"));
 		}
 	}
