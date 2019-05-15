@@ -36,29 +36,22 @@ Json::Json(const char* c)
 	: _json(Value(c)) {}
 Json::Json(const std::string& s)
 	: _json(Value(s)) {}
-Json::Json(std::string&& s)
-	: _json(Value(std::move(s))) {}
 Json::Json(const DjsonArray& a)
 	: _json(Value(a)) {}
-Json::Json(DjsonArray&& a)
-	: _json(Value(std::move(a))) {}
 Json::Json(const DjsonObject& o)
 	: _json(Value(o)) {}
-Json::Json(DjsonObject&& o)
-	: _json(Value(std::move(o))) {}
 
 const std::string Json::generate()
 {
 	std::string result;
-	Generator(_json.getValue(), result);
+	Generator(*this, result);
 	return result;
 }
 
-const Value Json::parse(const std::string& content)
+const Json& Json::parse(const std::string& content)
 {
-	Value v = _json.getValue();
-	Parser(v, content);
-	return v;
+	Parser(*this, content);
+	return *this;
 }
 
 DJSON_NAMESPACE_END

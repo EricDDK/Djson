@@ -25,7 +25,7 @@ do {\
 
 void test1()
 {
-	Djson::Json j1(nullptr);
+	/*Djson::Json j1(nullptr);
 	Djson::Json j2(1.0);
 	Djson::Json j3("test");
 	Djson::Json j4();
@@ -50,7 +50,7 @@ void test1()
 	EXPECT(v.getObject().at("key2").getType(), Djson::JsonType::kFalse);
 	EXPECT(v.getObject().at("key3").getType(), Djson::JsonType::kArray);
 	EXPECT(v.getObject().at("key3").getArray().size(), 5);
-	EXPECT(v.getObject().at("key3").getArray()[0].getNumber(), 0);
+	EXPECT(v.getObject().at("key3").getArray()[0].getNumber(), 0);*/
 }
 
 int main()

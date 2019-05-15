@@ -8,7 +8,7 @@ inline void expect(const char * &c, char ch)
 	++c;
 }
 
-Parser::Parser(Value &val, const std::string &result)
+Parser::Parser(Json &val, const std::string &result)
 	:_val(val)
 	, _cur(result.c_str())
 {

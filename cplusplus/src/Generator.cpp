@@ -2,14 +2,14 @@
 
 DJSON_NAMESPACE_START
 
-Generator::Generator(const Value &val, std::string &result)
+Generator::Generator(const Json &j, std::string &result)
 	:_result("")
 {
-	stringifyValue(val);
+	stringifyValue(j);
 	result = _result;
 }
 
-void Generator::stringifyValue(const Value &val)
+void Generator::stringifyValue(const Json &val)
 {
 	switch (val.getType())
 	{

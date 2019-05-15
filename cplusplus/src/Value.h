@@ -5,6 +5,7 @@
 #include <vector>
 #include <unordered_map>
 #include "Common.h"
+#include "Json.h"
 
 DJSON_NAMESPACE_START
 
@@ -21,20 +22,20 @@ public:
 	Value& operator=(const Value &rhs);
 
 	void setArray(const DjsonArray &arr);
-	const DjsonArray getArray() const;
-	void pushbackArrayElement(const Value& val);
+	const DjsonArray& getArray() const;
+	void pushbackArrayElement(const Json& val);
 	size_t getArraySize() const;
-	const Value& getArrayElement(size_t index) const;
+	const Json& getArrayElement(size_t index) const;
 	void popbackArrayElement();
-	void insertArrayElement(const Value &val, size_t index);
+	void insertArrayElement(const Json &val, size_t index);
 	void eraseArrayElement(size_t index, size_t count);
 	void clearArray();
 
-	void setObjectValue(const std::string &key, const Value &val);
+	void setObjectValue(const std::string &key, const Json &val);
 	void setObject(const DjsonObject &obj);
-	const DjsonObject getObject() const;
+	const DjsonObject& getObject() const;
 	const size_t getObjectSize() const;
-	const Value& getObjectValue(const std::string &key) const;
+	const Json& getObjectValue(const std::string &key) const;
 	void clearObject();
 
 	void setType(JsonType t);
@@ -46,12 +47,12 @@ public:
 	void setString(std::string &d);
 	const std::string& getString() const;
 
-	const Value& operator[](const std::string&) const;
-	Value& operator[](const std::string&);
-	const Value& operator[](size_t index) const;
-	Value& operator[](size_t index);
+	const Json& operator[](const std::string&) const;
+	Json& operator[](const std::string&);
+	const Json& operator[](size_t index) const;
+	Json& operator[](size_t index);
 
-	Value getValue() { return *this; }
+	const Value getValue() { return *this; }
 	//void parse(const std::string &content);
 
 public:

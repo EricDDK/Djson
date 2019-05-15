@@ -9,10 +9,10 @@ DJSON_NAMESPACE_START
 class Generator
 {
 public:
-	Generator(const Value &val, std::string &result);
+	Generator(const Json &val, std::string &result);
 
 private:
-	void stringifyValue(const Value &val);
+	void stringifyValue(const Json &val);
 	void stringifyString(const std::string &str);
 
 private:
