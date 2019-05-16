@@ -3,17 +3,11 @@
 
 #include "Common.h"
 #include "Value.h"
-#include "Parser.h"
-#include "Generator.h"
-#include <memory>
 
 DJSON_NAMESPACE_START
 
 class Json
 {
-public:
-	
-
 public:
 	Json() :Json(nullptr) {};
 	~Json() {}
@@ -35,6 +29,11 @@ public:
 
 	Json(void *) = delete;
 
+	const Json& operator[](const std::string& s) const { return _json.operator[](s); }
+	const Json& operator[](size_t index) const { return _json.operator[](index); }
+	Json& operator[](const std::string& s) { return _json.operator[](s); }
+	Json& operator[](size_t index) { return _json.operator[](index); }
+
 public:
 	const std::string generate();
 	const Json& parse(const std::string& content);
@@ -44,9 +43,9 @@ public:
 	const JsonType getType() const { return _json.getType(); }
 
 	void setNumber(double d) { _json.setNumber(d); }
-	void setString(std::string &d) { _json.setString(s); }
+	void setString(std::string &s) { _json.setString(s); }
 	void setArray(const DjsonArray &arr) { _json.setArray(arr); }
-	void setObject(const DjsonObject &obj) { _json.setObject(); }
+	void setObject(const DjsonObject &obj) { _json.setObject(obj); }
 
 	bool getBool() const { assert(_json.getType() == JsonType::kFalse || _json.getType() == JsonType::kTrue); return _json.getType() == JsonType::kTrue ? true : false; }
 	double getNumber() const { return _json.getNumber(); }
@@ -60,9 +59,12 @@ public:
 	const Value getValue() { return _json.getValue(); }
 
 private:
-	Djson::Value _json;
+	Value _json;
 
 };
+
+bool operator==(const Json&, const Json&);
+inline bool operator!=(const Json& lhs, const Json& rhs) { return !(lhs == rhs); }
 
 DJSON_NAMESPACE_END
 

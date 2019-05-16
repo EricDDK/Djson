@@ -44,19 +44,19 @@ void Parser::parseValue()
 	case 'f':
 		parseLiteral("false", JsonType::kFalse);
 		return;
-	case '\"': 
-		parseString(); 
+	case '\"':
+		parseString();
 		return;
-	case '[': 
-		parseArray();  
+	case '[':
+		parseArray();
 		return;
-	case '{': 
-		parseObject(); 
+	case '{':
+		parseObject();
 		return;
 	default:
 		parseNumber();
 		return;
-	case '\0': 
+	case '\0':
 		throw(std::logic_error("parse expect value"));
 	}
 }
@@ -87,12 +87,12 @@ void Parser::parseNumber()
 			throw(std::logic_error("parse invalid value"));
 		while (isdigit(*++p));
 	}
-	if (*p == 'e' || *p == 'E') 
+	if (*p == 'e' || *p == 'E')
 	{
 		++p;
-		if (*p == '+' || *p == '-') 
+		if (*p == '+' || *p == '-')
 			++p;
-		if (!isdigit(*p)) 
+		if (!isdigit(*p))
 			throw (std::logic_error("parse invalid value"));
 		while (isdigit(*++p));
 	}
@@ -115,13 +115,13 @@ void Parser::parseStringRaw(std::string &tmp)
 	expect(_cur, '\"');
 	const char *p = _cur;
 	unsigned u = 0, u2 = 0;
-	while (*p != '\"') 
+	while (*p != '\"')
 	{
 		if (*p == '\0')
 			throw(std::logic_error("parse miss quotation mark"));
-		if (*p == '\\' && ++p) 
+		if (*p == '\\' && ++p)
 		{
-			switch (*p++) 
+			switch (*p++)
 			{
 			case '\"': tmp += '\"'; break;
 			case '\\': tmp += '\\'; break;
@@ -133,7 +133,7 @@ void Parser::parseStringRaw(std::string &tmp)
 			case 't': tmp += '\t'; break;
 			case 'u':
 				parseHex4(p, u);
-				if (u >= 0xD800 && u <= 0xDBFF) 
+				if (u >= 0xD800 && u <= 0xDBFF)
 				{
 					if (*p++ != '\\')
 						throw(std::logic_error("parse invalid unicode surrogate"));
@@ -149,7 +149,7 @@ void Parser::parseStringRaw(std::string &tmp)
 			default: throw (std::logic_error("parse invalid string escape"));
 			}
 		}
-		else if ((unsigned char)*p < 0x20) 
+		else if ((unsigned char)*p < 0x20)
 		{
 			throw (std::logic_error("parse invalid string char"));
 		}
@@ -161,7 +161,7 @@ void Parser::parseStringRaw(std::string &tmp)
 void Parser::parseHex4(const char* &p, unsigned &u)
 {
 	u = 0;
-	for (int i = 0; i < 4; ++i) 
+	for (int i = 0; i < 4; ++i)
 	{
 		char ch = *p++;
 		u <<= 4;
@@ -171,7 +171,7 @@ void Parser::parseHex4(const char* &p, unsigned &u)
 			u |= ch - ('A' - 10);
 		else if (ch >= 'a' && ch <= 'f')
 			u |= ch - ('a' - 10);
-		else 
+		else
 			throw(std::logic_error("parse invalid unicode hex"));
 	}
 }

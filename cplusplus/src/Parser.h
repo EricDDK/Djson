@@ -2,7 +2,7 @@
 #define _DJSON_PARSER_H__
 
 #include "Common.h"
-#include "Value.h"
+#include "Json.h"
 
 DJSON_NAMESPACE_START
 

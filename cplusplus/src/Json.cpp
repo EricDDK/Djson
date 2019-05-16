@@ -1,9 +1,13 @@
 #include "Json.h"
+#include "Parser.h"
+#include "Generator.h"
+#include "Value.h"
 
 DJSON_NAMESPACE_START
 
 Json::Json(const Json& rhs)
 {
+	setType(rhs.getType());
 	switch (rhs.getType())
 	{
 	case JsonType::kNumber:
@@ -21,7 +25,13 @@ Json::Json(const Json& rhs)
 	default:
 		break;
 	}
-	setType(rhs.getType());
+}
+
+Json& Json::operator=(const Json& rhs)
+{
+	Json tmp(rhs);
+	std::swap(_json, tmp._json);
+	return *this;
 }
 
 Json::Json(std::nullptr_t)
@@ -52,6 +62,18 @@ const Json& Json::parse(const std::string& content)
 {
 	Parser(*this, content);
 	return *this;
+}
+
+bool operator==(const Json& lhs, const Json& rhs) {
+	if (lhs.getType() != rhs.getType())
+		return false;
+	switch (lhs.getType()) {
+	case JsonType::kNull: return true;
+	case JsonType::kNumber: return lhs.getNumber() == rhs.getNumber();
+	case JsonType::kString: return lhs.getString() == rhs.getString();
+	case JsonType::kArray: return lhs.getArray() == rhs.getArray();
+	default:return lhs.getObject() == rhs.getObject();
+	}
 }
 
 DJSON_NAMESPACE_END

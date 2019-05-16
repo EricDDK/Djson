@@ -1,4 +1,5 @@
 #include "Value.h"
+#include "Json.h"
 
 DJSON_NAMESPACE_START
 
@@ -103,7 +104,7 @@ void Value::clearArray()
 	_array.clear();
 }
 
-void Value::setObjectValue(const std::string &key, const Json &val)
+void Value::setObjectValue(const std::string &key, Json &val)
 {
 	assert(_type == JsonType::kObject);
 	_object[key] = val;
