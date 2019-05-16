@@ -26,6 +26,34 @@ Djson::Json j7 = DjsonObject{
 };
 ```
 
+## create & add
+```
+Djson::Json j2 = DjsonArray{ 1,1,1,1,1,1,1,1 };
+j2.add(-500);
+```
+```
+Djson::Json j3 = DjsonObject{
+  { "key1", j1 }
+};
+j3.add("key2", j2);
+j3.add("key3", 55000);
+```
+
+## compare
+```
+Djson::Json j1 = DjsonObject{
+  { "key1", "Value" },
+  { "key2", 3.15 },
+  { "key3", DjsonArray{ 0,1,2,3 } }
+};
+Djson::Json j2 = Djson::Json(j1);
+if (j1 == j2)
+{
+  // Todo
+}
+```
+## -------------------------------------------------------------------
+
 # Djson-lua:
 require("json")
 ```
