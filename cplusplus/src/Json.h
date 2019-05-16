@@ -3,16 +3,29 @@
 
 #include "Common.h"
 #include "Value.h"
-#include "Parser.h"
-#include "Generator.h"
-#include <memory>
 
 DJSON_NAMESPACE_START
 
 class Json
 {
 public:
+	const std::string generate();
+	const Json& parse(const std::string& content);
 	
+public:
+	template<typename T>
+	void add(const std::string& key, const T& t)
+	{
+		assert(getType() == JsonType::kObject);
+		_json.pushObject(key, Json(t));
+	}
+
+	template<typename T>
+	void add(const T& t)
+	{
+		assert(getType() == JsonType::kArray);
+		_json.pushbackArrayElement(Json(t));
+	}
 
 public:
 	Json() :Json(nullptr) {};
@@ -27,34 +40,43 @@ public:
 	Json(double d);
 	Json(const char* c);
 	Json(const std::string& s);
-	Json(std::string&& s);
 	Json(const DjsonArray& a);
-	Json(DjsonArray&& a);
 	Json(const DjsonObject& o);
-	Json(DjsonObject&& o);
 
 	Json(void *) = delete;
 
-public:
-	const std::string generate();
-	const Value parse(const std::string& content);
+	const Json& operator[](const std::string& s) const;
+	const Json& operator[](size_t index) const;
+	Json& operator[](const std::string& s);
+	Json& operator[](size_t index);
 
 public:
-	void setType(JsonType type) { _json.setType(type); }
-	const JsonType getType() const { return _json.getType(); }
+	void setType(JsonType type);
+	const JsonType getType() const;
 
-	bool getBool() const { assert(_json.getType() == JsonType::kFalse || _json.getType() == JsonType::kTrue); return _json.getType() == JsonType::kTrue ? true : false; }
-	double getNumber() const { return _json.getNumber(); }
-	const std::string& getString() const { return _json.getString(); }
-	const DjsonArray getArray() const { return _json.getArray(); }
-	const DjsonObject getObject() const { return _json.getObject(); }
-	
-	Value getValue() { return _json.getValue(); }
+	void setNumber(double d);
+	void setString(std::string &s);
+	void setArray(const DjsonArray &arr);
+	void setObject(const DjsonObject &obj);
+
+	bool getBool() const; 
+	double getNumber() const;
+	const std::string& getString() const;
+	const DjsonArray& getArray() const;
+	const DjsonObject& getObject() const;
+
+	size_t getArraySize() const;
+	const Json& getArrayElement(size_t index) const;
+
+	const Value getValue();
 
 private:
-	Djson::Value _json;
+	Value _json;
 
 };
+
+bool operator==(const Json&, const Json&);
+inline bool operator!=(const Json& lhs, const Json& rhs) { return !(lhs == rhs); }
 
 DJSON_NAMESPACE_END
 

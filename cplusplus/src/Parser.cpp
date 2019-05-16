@@ -8,7 +8,17 @@ inline void expect(const char * &c, char ch)
 	++c;
 }
 
-Parser::Parser(Value &val, const std::string &result)
+constexpr inline bool is1to9(char ch) 
+{ 
+	return ch >= '1' && ch <= '9'; 
+}
+
+constexpr inline bool is0to9(char ch) 
+{ 
+	return ch >= '0' && ch <= '9'; 
+}
+
+Parser::Parser(Json &val, const std::string &result)
 	:_val(val)
 	, _cur(result.c_str())
 {
@@ -44,19 +54,19 @@ void Parser::parseValue()
 	case 'f':
 		parseLiteral("false", JsonType::kFalse);
 		return;
-	case '\"': 
-		parseString(); 
+	case '\"':
+		parseString();
 		return;
-	case '[': 
-		parseArray();  
+	case '[':
+		parseArray();
 		return;
-	case '{': 
-		parseObject(); 
+	case '{':
+		parseObject();
 		return;
 	default:
 		parseNumber();
 		return;
-	case '\0': 
+	case '\0':
 		throw(std::logic_error("parse expect value"));
 	}
 }
@@ -83,18 +93,25 @@ void Parser::parseNumber()
 		++p;
 	else
 	{
-		if (!isdigit(*p))
+		if (!is1to9(*p))
 			throw(std::logic_error("parse invalid value"));
-		while (isdigit(*++p));
+		for (p++; is0to9(*p); p++);
 	}
-	if (*p == 'e' || *p == 'E') 
+	if (*p == '.')
 	{
 		++p;
-		if (*p == '+' || *p == '-') 
+		if (!is1to9(*p))
+			throw(std::logic_error("parse invalid value"));
+		for (p++; is0to9(*p); p++);
+	}
+	if (*p == 'e' || *p == 'E')
+	{
+		++p;
+		if (*p == '+' || *p == '-')
 			++p;
-		if (!isdigit(*p)) 
+		if (!is0to9(*p))
 			throw (std::logic_error("parse invalid value"));
-		while (isdigit(*++p));
+		while (is0to9(*++p));
 	}
 	double v = strtod(_cur, NULL);
 	if (v == HUGE_VAL || v == -HUGE_VAL)
@@ -115,13 +132,13 @@ void Parser::parseStringRaw(std::string &tmp)
 	expect(_cur, '\"');
 	const char *p = _cur;
 	unsigned u = 0, u2 = 0;
-	while (*p != '\"') 
+	while (*p != '\"')
 	{
 		if (*p == '\0')
 			throw(std::logic_error("parse miss quotation mark"));
-		if (*p == '\\' && ++p) 
+		if (*p == '\\' && ++p)
 		{
-			switch (*p++) 
+			switch (*p++)
 			{
 			case '\"': tmp += '\"'; break;
 			case '\\': tmp += '\\'; break;
@@ -133,7 +150,7 @@ void Parser::parseStringRaw(std::string &tmp)
 			case 't': tmp += '\t'; break;
 			case 'u':
 				parseHex4(p, u);
-				if (u >= 0xD800 && u <= 0xDBFF) 
+				if (u >= 0xD800 && u <= 0xDBFF)
 				{
 					if (*p++ != '\\')
 						throw(std::logic_error("parse invalid unicode surrogate"));
@@ -149,7 +166,7 @@ void Parser::parseStringRaw(std::string &tmp)
 			default: throw (std::logic_error("parse invalid string escape"));
 			}
 		}
-		else if ((unsigned char)*p < 0x20) 
+		else if ((unsigned char)*p < 0x20)
 		{
 			throw (std::logic_error("parse invalid string char"));
 		}
@@ -161,17 +178,17 @@ void Parser::parseStringRaw(std::string &tmp)
 void Parser::parseHex4(const char* &p, unsigned &u)
 {
 	u = 0;
-	for (int i = 0; i < 4; ++i) 
+	for (int i = 0; i < 4; ++i)
 	{
 		char ch = *p++;
 		u <<= 4;
-		if (isdigit(ch))
+		if (is0to9(ch))
 			u |= ch - '0';
 		else if (ch >= 'A' && ch <= 'F')
 			u |= ch - ('A' - 10);
 		else if (ch >= 'a' && ch <= 'f')
 			u |= ch - ('a' - 10);
-		else 
+		else
 			throw(std::logic_error("parse invalid unicode hex"));
 	}
 }
@@ -220,7 +237,6 @@ void Parser::parseArray()
 			catch (std::logic_error)
 			{
 				_val.setType(JsonType::kNull);
-				throw;
 			}
 			tmp.push_back(_val);
 			parseWhiteSpace();
@@ -272,7 +288,6 @@ void Parser::parseObject()
 		}
 		catch (std::logic_error) {
 			_val.setType(JsonType::kNull);
-			throw;
 		}
 		tmp[key] = _val;
 		_val.setType(JsonType::kNull);
