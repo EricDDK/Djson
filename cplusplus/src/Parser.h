@@ -2,14 +2,14 @@
 #define _DJSON_PARSER_H__
 
 #include "Common.h"
-#include "Value.h"
+#include "Json.h"
 
 DJSON_NAMESPACE_START
 
 class Parser
 {
 public:
-	Parser(Value &val, const std::string &result);
+	Parser(Json &val, const std::string &result);
 
 private:
 	void parseWhiteSpace();
@@ -25,7 +25,7 @@ private:
 
 private:
 	const char* _cur;
-	Value _val;
+	Json _val;
 
 };
 

@@ -2,14 +2,14 @@
 
 DJSON_NAMESPACE_START
 
-Generator::Generator(const Value &val, std::string &result)
+Generator::Generator(const Json &j, std::string &result)
 	:_result("")
 {
-	stringifyValue(val);
+	stringifyValue(j);
 	result = _result;
 }
 
-void Generator::stringifyValue(const Value &val)
+void Generator::stringifyValue(const Json &val)
 {
 	switch (val.getType())
 	{
@@ -55,9 +55,9 @@ void Generator::stringifyValue(const Value &val)
 			stringifyValue(o.second);
 			++i;
 		}
-		_result += '}'; 
+		_result += '}';
 	}
-		break;
+	break;
 	default:
 		break;
 	}
@@ -70,26 +70,26 @@ void Generator::stringifyString(const std::string &str)
 	{
 		switch (*it)
 		{
-		case '\"': 
-			_result += "\\\""; 
+		case '\"':
+			_result += "\\\"";
 			break;
-		case '\\': 
-			_result += "\\\\"; 
+		case '\\':
+			_result += "\\\\";
 			break;
-		case '\b': 
-			_result += "\\b";  
+		case '\b':
+			_result += "\\b";
 			break;
-		case '\f': 
-			_result += "\\f";  
+		case '\f':
+			_result += "\\f";
 			break;
-		case '\n': 
-			_result += "\\n";  
+		case '\n':
+			_result += "\\n";
 			break;
-		case '\r': 
-			_result += "\\r";  
+		case '\r':
+			_result += "\\r";
 			break;
-		case '\t': 
-			_result += "\\t";  
+		case '\t':
+			_result += "\\t";
 			break;
 		default:
 			if (*it < 0x20)

@@ -1,9 +1,13 @@
 #include "Json.h"
+#include "Parser.h"
+#include "Generator.h"
+#include "Value.h"
 
 DJSON_NAMESPACE_START
 
 Json::Json(const Json& rhs)
 {
+	setType(rhs.getType());
 	switch (rhs.getType())
 	{
 	case JsonType::kNumber:
@@ -21,7 +25,13 @@ Json::Json(const Json& rhs)
 	default:
 		break;
 	}
-	setType(rhs.getType());
+}
+
+Json& Json::operator=(const Json& rhs)
+{
+	Json tmp(rhs);
+	std::swap(_json, tmp._json);
+	return *this;
 }
 
 Json::Json(std::nullptr_t)
@@ -36,29 +46,34 @@ Json::Json(const char* c)
 	: _json(Value(c)) {}
 Json::Json(const std::string& s)
 	: _json(Value(s)) {}
-Json::Json(std::string&& s)
-	: _json(Value(std::move(s))) {}
 Json::Json(const DjsonArray& a)
 	: _json(Value(a)) {}
-Json::Json(DjsonArray&& a)
-	: _json(Value(std::move(a))) {}
 Json::Json(const DjsonObject& o)
 	: _json(Value(o)) {}
-Json::Json(DjsonObject&& o)
-	: _json(Value(std::move(o))) {}
 
 const std::string Json::generate()
 {
 	std::string result;
-	Generator(_json.getValue(), result);
+	Generator(*this, result);
 	return result;
 }
 
-const Value Json::parse(const std::string& content)
+const Json& Json::parse(const std::string& content)
 {
-	Value v = _json.getValue();
-	Parser(v, content);
-	return v;
+	Parser(*this, content);
+	return *this;
+}
+
+bool operator==(const Json& lhs, const Json& rhs) {
+	if (lhs.getType() != rhs.getType())
+		return false;
+	switch (lhs.getType()) {
+	case JsonType::kNull: return true;
+	case JsonType::kNumber: return lhs.getNumber() == rhs.getNumber();
+	case JsonType::kString: return lhs.getString() == rhs.getString();
+	case JsonType::kArray: return lhs.getArray() == rhs.getArray();
+	default:return lhs.getObject() == rhs.getObject();
+	}
 }
 
 DJSON_NAMESPACE_END

@@ -1,4 +1,5 @@
 #include "Value.h"
+#include "Json.h"
 
 DJSON_NAMESPACE_START
 
@@ -37,7 +38,7 @@ void Value::setObject(const DjsonObject &obj)
 	}
 }
 
-const DjsonObject Value::getObject() const
+const DjsonObject& Value::getObject() const
 {
 	assert(_type == JsonType::kObject);
 	return _object;
@@ -55,19 +56,19 @@ void Value::setArray(const DjsonArray &arr)
 	}
 }
 
-const DjsonArray Value::getArray() const
+const DjsonArray& Value::getArray() const
 {
 	assert(_type == JsonType::kArray);
 	return _array;
 }
 
-void Value::pushbackArrayElement(const Value& val)
+void Value::pushbackArrayElement(const Json& val)
 {
 	assert(_type == JsonType::kArray);
 	_array.push_back(val);
 }
 
-const Value& Value::getArrayElement(size_t index) const
+const Json& Value::getArrayElement(size_t index) const
 {
 	assert(_type == JsonType::kArray);
 	return _array[index];
@@ -85,7 +86,7 @@ void Value::popbackArrayElement()
 	_array.pop_back();
 }
 
-void Value::insertArrayElement(const Value &val, size_t index)
+void Value::insertArrayElement(const Json &val, size_t index)
 {
 	assert(_type == JsonType::kArray);
 	_array.insert(_array.begin() + index, val);
@@ -103,7 +104,7 @@ void Value::clearArray()
 	_array.clear();
 }
 
-void Value::setObjectValue(const std::string &key, const Value &val)
+void Value::setObjectValue(const std::string &key, Json &val)
 {
 	assert(_type == JsonType::kObject);
 	_object[key] = val;
@@ -115,7 +116,7 @@ const size_t Value::getObjectSize() const
 	return _object.size();
 }
 
-const Value& Value::getObjectValue(const std::string &key) const
+const Json& Value::getObjectValue(const std::string &key) const
 {
 	assert(_type == JsonType::kObject);
 	if (_object.count(key))
@@ -216,7 +217,7 @@ const std::string& Value::getString() const
 	return _str;
 }
 
-const Value& Value::operator[](const std::string &key) const
+const Json& Value::operator[](const std::string &key) const
 {
 	assert(_type == JsonType::kObject);
 	if (_object.count(key))
@@ -224,7 +225,7 @@ const Value& Value::operator[](const std::string &key) const
 	throw;
 }
 
-Value& Value::operator[](const std::string &key)
+Json& Value::operator[](const std::string &key)
 {
 	assert(_type == JsonType::kObject);
 	if (_object.count(key))
@@ -232,14 +233,14 @@ Value& Value::operator[](const std::string &key)
 	throw;
 }
 
-const Value& Value::operator[](size_t index) const
+const Json& Value::operator[](size_t index) const
 {
 	assert(_type == JsonType::kArray);
 	assert(_array.size() > index);
 	return _array[index];
 }
 
-Value& Value::operator[](size_t index)
+Json& Value::operator[](size_t index)
 {
 	assert(_type == JsonType::kArray);
 	assert(_array.size() > index);

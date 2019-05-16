@@ -36,7 +36,7 @@ void test1()
 		{ "key3", DjsonArray{ 0,1,2,3,4 } }
 	};
 	Djson::Json j7 = DjsonObject{
-		{ "key1", j6.getValue() }
+		{ "key1", j6 }
 	};
 
 	std::string str = j6.generate();
@@ -44,7 +44,7 @@ void test1()
 
 	str = "{\"key1\":  \"Value\",\"key2\":false   , \"key3\":[  0, 1,      2,3,4]}";
 	Djson::Json j;
-	Value v = j.parse(str);
+	Json v = j.parse(str);
 	EXPECT(v.getType(), Djson::JsonType::kObject);
 	EXPECT(v.getObject().at("key1").getString(), "Value");
 	EXPECT(v.getObject().at("key2").getType(), Djson::JsonType::kFalse);
