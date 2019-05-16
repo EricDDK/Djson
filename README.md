@@ -6,7 +6,7 @@ a light weight json serialization library used lua/c++
 ```
 std::string str = "{\"key1\":\"Value\",\"key2\":false,\"key3\":[0,1,2,3,4]}";
 Djson::Json j;
-Value v = j.parse(str);
+Json v = j.parse(str);
 ```
 
 ## generate
@@ -15,14 +15,14 @@ Djson::Json j1(nullptr);
 Djson::Json j2(1.0);
 Djson::Json j3("test");
 Djson::Json j4();
-Djson::Json j5 = Djson::Json::Array{ 0,1,2,3,4 };
-Djson::Json j6 = Djson::Json::Object{
+Djson::Json j5 = DjsonArray{ 0,1,2,3,4 };
+Djson::Json j6 = DjsonObject{
   { "key1", "Value" },
   { "key2", false },
-  { "key3", Djson::Json::Array{ 0,1,2,3,4 } }
+  { "key3", DjsonArray{ 0,1,2,3,4 } }
 };
-Djson::Json j7 = Djson::Json::Object{
-  { "key1", j6.getValue() }
+Djson::Json j7 = DjsonObject{
+  { "key1", j6 }
 };
 ```
 
