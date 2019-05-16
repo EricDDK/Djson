@@ -45,6 +45,7 @@ public:
 
 	void setObjectValue(const std::string &key, Json &val);
 	void setObject(const DjsonObject &obj);
+	void pushObject(const std::string &key, const Json &val);
 	const DjsonObject& getObject() const;
 	const size_t getObjectSize() const;
 	const Json& getObjectValue(const std::string &key) const;

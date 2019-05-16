@@ -154,7 +154,6 @@ const Value Json::getValue()
 	return _json.getValue();
 }
 
-
 bool operator==(const Json& lhs, const Json& rhs) {
 	if (lhs.getType() != rhs.getType())
 		return false;

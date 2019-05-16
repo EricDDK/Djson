@@ -128,6 +128,12 @@ void Value::setObject(const DjsonObject &obj)
 	}
 }
 
+void Value::pushObject(const std::string &key, const Json &val)
+{
+	if (_type == JsonType::kObject)
+		_object.insert(_object.end(), { key, val });
+}
+
 const DjsonObject& Value::getObject() const
 {
 	assert(_type == JsonType::kObject);
