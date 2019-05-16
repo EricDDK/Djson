@@ -4,26 +4,27 @@
 #include <assert.h>
 #include <string.h>
 #include <vector>
+#include <unordered_map>
 
 #define DJSON_NAMESPACE_START namespace Djson {
 #define DJSON_NAMESPACE_END }
 #define DJSON_NAMESPACE_USE using namespace Djson ;
 
-DJSON_NAMESPACE_START
-
 #define DjsonArray std::vector<Djson::Json>
 #define DjsonObject std::unordered_map<std::string, Djson::Json>
 
-	enum class JsonType
-	{
-		kNull,
-		kTrue,
-		kFalse,
-		kNumber,
-		kString,
-		kArray,
-		kObject
-	};
+DJSON_NAMESPACE_START
+
+enum class JsonType
+{
+	kNull,
+	kTrue,
+	kFalse,
+	kNumber,
+	kString,
+	kArray,
+	kObject
+};
 
 DJSON_NAMESPACE_END
 

@@ -1,4 +1,5 @@
 #include "Generator.h"
+#include <sstream>
 
 DJSON_NAMESPACE_START
 
@@ -24,7 +25,7 @@ void Generator::stringifyValue(const Json &val)
 		break;
 	case JsonType::kNumber:
 	{
-		char buffer[32] = { 0 };
+		char buffer[32];
 		sprintf(buffer, "%.17g", val.getNumber());
 		_result += buffer;
 	}
@@ -34,7 +35,7 @@ void Generator::stringifyValue(const Json &val)
 		break;
 	case JsonType::kArray:
 		_result += '[';
-		for (int i = 0; i < val.getArraySize(); ++i)
+		for (size_t i = 0; i < val.getArraySize(); ++i)
 		{
 			if (i > 0)
 				_result += ',';
@@ -94,7 +95,7 @@ void Generator::stringifyString(const std::string &str)
 		default:
 			if (*it < 0x20)
 			{
-				char buffer[7] = { 0 };
+				char buffer[7];
 				sprintf(buffer, "\\u%04X", *it);
 				_result += buffer;
 			}
