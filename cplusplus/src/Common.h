@@ -2,7 +2,7 @@
 #define _DJSON_COMMON_H__
 
 #include <assert.h>
-#include <string.h>
+#include <string>
 #include <vector>
 #include <unordered_map>
 
