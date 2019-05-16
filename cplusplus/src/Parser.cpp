@@ -1,5 +1,4 @@
 #include "Parser.h"
-#include <ctype.h>
 
 DJSON_NAMESPACE_START
 
@@ -7,6 +6,16 @@ inline void expect(const char * &c, char ch)
 {
 	assert(*c == ch);
 	++c;
+}
+
+constexpr inline bool is1to9(char ch) 
+{ 
+	return ch >= '1' && ch <= '9'; 
+}
+
+constexpr inline bool is0to9(char ch) 
+{ 
+	return ch >= '0' && ch <= '9'; 
 }
 
 Parser::Parser(Json &val, const std::string &result)
@@ -84,18 +93,25 @@ void Parser::parseNumber()
 		++p;
 	else
 	{
-		if (!isdigit(*p))
+		if (!is1to9(*p))
 			throw(std::logic_error("parse invalid value"));
-		while (isdigit(*++p));
+		for (p++; is0to9(*p); p++);
+	}
+	if (*p == '.')
+	{
+		++p;
+		if (!is1to9(*p))
+			throw(std::logic_error("parse invalid value"));
+		for (p++; is0to9(*p); p++);
 	}
 	if (*p == 'e' || *p == 'E')
 	{
 		++p;
 		if (*p == '+' || *p == '-')
 			++p;
-		if (!isdigit(*p))
+		if (!is0to9(*p))
 			throw (std::logic_error("parse invalid value"));
-		while (isdigit(*++p));
+		while (is0to9(*++p));
 	}
 	double v = strtod(_cur, NULL);
 	if (v == HUGE_VAL || v == -HUGE_VAL)
@@ -166,7 +182,7 @@ void Parser::parseHex4(const char* &p, unsigned &u)
 	{
 		char ch = *p++;
 		u <<= 4;
-		if (isdigit(ch))
+		if (is0to9(ch))
 			u |= ch - '0';
 		else if (ch >= 'A' && ch <= 'F')
 			u |= ch - ('A' - 10);
@@ -221,7 +237,6 @@ void Parser::parseArray()
 			catch (std::logic_error)
 			{
 				_val.setType(JsonType::kNull);
-				throw;
 			}
 			tmp.push_back(_val);
 			parseWhiteSpace();
@@ -273,7 +288,6 @@ void Parser::parseObject()
 		}
 		catch (std::logic_error) {
 			_val.setType(JsonType::kNull);
-			throw;
 		}
 		tmp[key] = _val;
 		_val.setType(JsonType::kNull);
