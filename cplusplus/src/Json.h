@@ -11,6 +11,21 @@ class Json
 public:
 	const std::string generate();
 	const Json& parse(const std::string& content);
+	
+public:
+	template<typename T>
+	void add(const std::string& key, const T& t)
+	{
+		assert(getType() == JsonType::kObject);
+		_json.pushObject(key, Json(t));
+	}
+
+	template<typename T>
+	void add(const T& t)
+	{
+		assert(getType() == JsonType::kArray);
+		_json.pushbackArrayElement(Json(t));
+	}
 
 public:
 	Json() :Json(nullptr) {};
