@@ -1,4 +1,5 @@
 #include "Parser.h"
+#include <ctype.h>
 
 DJSON_NAMESPACE_START
 

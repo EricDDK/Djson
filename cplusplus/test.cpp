@@ -28,7 +28,7 @@ void test1()
 	Djson::Json j1(nullptr);
 	Djson::Json j2(1.0);
 	Djson::Json j3("test");
-	Djson::Json j4();
+	Djson::Json j4(44);
 	Djson::Json j5 = DjsonArray{ 0,1,2,3,4 };
 	Djson::Json j6 = DjsonObject{
 		{ "key1", "Value" },
