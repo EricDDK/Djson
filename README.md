@@ -5,7 +5,7 @@ a light weight json serialization library used lua/c++
         <img src="https://img.shields.io/badge/language-C%2B%2B11-blue.svg">
     </a>
     <a href="https://www.lua.org/">
-        <img src="https://img.shields.io/badge/language-lua%205.1-red.svg">
+        <img src="https://img.shields.io/badge/language-lua5.1+-red.svg">
     </a>
     <a href="https://travis-ci.org/felixguendling/cista">
         <img src="https://travis-ci.org/felixguendling/cista.svg?branch=master">
