@@ -38,3 +38,7 @@ cplusplus/Djson/.vs
 [Dd]ebug/
 [Rr]elease/
 build/
+
+# mac os
+*.DS_Store
+
