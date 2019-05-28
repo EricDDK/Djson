@@ -19,13 +19,26 @@ a light weight json serialization library used lua/c++ developed.
 </p>
 
 # Djson-c++:
+## enum
+   there are 7 types describing json objects. 
+```
+enum class JsonType
+{
+	kNull,
+	kTrue,
+	kFalse,
+	kNumber,
+	kString,
+	kArray,
+	kObject
+};
+```
 ## parse
 ```
 std::string str = "{\"key1\":\"Value\",\"key2\":false,\"key3\":[0,1,2,3,4]}";
 Djson::Json j;
 Json v = j.parse(str);
 ```
-
 ## generate
 ```
 Djson::Json j1(nullptr);
@@ -42,7 +55,6 @@ Djson::Json j7 = DjsonObject{
   { "key1", j6 }
 };
 ```
-
 ## create & add
 ```
 Djson::Json j2 = DjsonArray{ 1,1,1,1,1,1,1,1 };
@@ -55,7 +67,10 @@ Djson::Json j3 = DjsonObject{
 j3.add("key2", j2);
 j3.add("key3", 55000);
 ```
-
+## copy
+```
+Djson::Json j = Djson::Json(j1);
+```
 ## compare
 ```
 Djson::Json j1 = DjsonObject{
