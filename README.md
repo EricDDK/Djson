@@ -1,5 +1,5 @@
 # Djson
-a light weight json serialization library used lua/c++
+a light weight json serialization library used lua/c++ developed.
 <p align="left">
     <a href="https://isocpp.org/">
         <img src="https://img.shields.io/badge/language-C%2B%2B11-blue.svg">
