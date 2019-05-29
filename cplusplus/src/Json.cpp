@@ -64,29 +64,29 @@ Json::Json(const DjsonArray& a)
 Json::Json(const DjsonObject& o)
 	: _json(Value(o)) {}
 
-const Json& Json::operator[](const std::string& s) const 
-{ 
-	return _json.operator[](s); 
+const Json& Json::operator[](const std::string& s) const
+{
+	return _json.operator[](s);
 }
 
-const Json& Json::operator[](size_t index) const 
-{ 
-	return _json.operator[](index); 
+const Json& Json::operator[](size_t index) const
+{
+	return _json.operator[](index);
 }
 
-Json& Json::operator[](const std::string& s) 
-{ 
-	return _json.operator[](s); 
+Json& Json::operator[](const std::string& s)
+{
+	return _json.operator[](s);
 }
 
-Json& Json::operator[](size_t index) 
-{ 
-	return _json.operator[](index); 
+Json& Json::operator[](size_t index)
+{
+	return _json.operator[](index);
 }
 
-void Json::setType(JsonType type) 
-{ 
-	_json.setType(type); 
+void Json::setType(JsonType type)
+{
+	_json.setType(type);
 }
 
 const JsonType Json::getType() const
