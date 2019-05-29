@@ -8,14 +8,14 @@ inline void expect(const char * &c, char ch)
 	++c;
 }
 
-constexpr inline bool is1to9(char ch) 
-{ 
-	return ch >= '1' && ch <= '9'; 
+constexpr inline bool is1to9(char ch)
+{
+	return ch >= '1' && ch <= '9';
 }
 
-constexpr inline bool is0to9(char ch) 
-{ 
-	return ch >= '0' && ch <= '9'; 
+constexpr inline bool is0to9(char ch)
+{
+	return ch >= '0' && ch <= '9';
 }
 
 Parser::Parser(Json &val, const std::string &result)

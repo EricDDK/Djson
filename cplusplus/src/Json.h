@@ -11,7 +11,7 @@ class Json
 public:
 	const std::string generate();
 	const Json& parse(const std::string& content);
-	
+
 public:
 	template<typename T>
 	void add(const std::string& key, const T& t)
@@ -59,7 +59,7 @@ public:
 	void setArray(const DjsonArray &arr);
 	void setObject(const DjsonObject &obj);
 
-	bool getBool() const; 
+	bool getBool() const;
 	double getNumber() const;
 	const std::string& getString() const;
 	const DjsonArray& getArray() const;

@@ -21,20 +21,20 @@ Value::Value(const Value &rhs)
 
 Value::Value(std::nullptr_t)
 	:_type(Djson::JsonType::kNull) {}
-Value::Value(bool b) 
-	:_type(b ? Djson::JsonType::kTrue : Djson::JsonType::kFalse) {}
-Value::Value(int i) 
-	:Value(1.0 * i) {}
-Value::Value(double d) 
-	:_type(Djson::JsonType::kNumber), _num(d) {}
-Value::Value(const char* s) 
-	:_type(Djson::JsonType::kString), _str(s) {}
+Value::Value(bool b)
+	: _type(b ? Djson::JsonType::kTrue : Djson::JsonType::kFalse) {}
+Value::Value(int i)
+	: Value(1.0 * i) {}
+Value::Value(double d)
+	: _type(Djson::JsonType::kNumber), _num(d) {}
+Value::Value(const char* s)
+	: _type(Djson::JsonType::kString), _str(s) {}
 Value::Value(const std::string& s)
-	:_type(Djson::JsonType::kString), _str(s) {}
-Value::Value(const DjsonArray& a) 
-	:_type(Djson::JsonType::kArray), _array(a) {}
-Value::Value(const DjsonObject& o) 
-	:_type(Djson::JsonType::kObject), _object(o) {}
+	: _type(Djson::JsonType::kString), _str(s) {}
+Value::Value(const DjsonArray& a)
+	: _type(Djson::JsonType::kArray), _array(a) {}
+Value::Value(const DjsonObject& o)
+	: _type(Djson::JsonType::kObject), _object(o) {}
 
 void Value::init(const Value &rhs)
 {
@@ -269,9 +269,9 @@ const std::string& Value::getString() const
 	return _str;
 }
 
-const Value Value::getValue() const 
-{ 
-	return *this; 
+const Value Value::getValue() const
+{
+	return *this;
 }
 
 bool operator==(const Value &lhs, const Value &rhs)
